@@ -22,10 +22,11 @@ public class NotasDataModel {
 
         queryCriarTabela += "CREATE TABLE " + TABELA;
         queryCriarTabela += "(";
-        queryCriarTabela += id + "INTEGER PRIMARY KEY AUTO_INCREMENT, ";
-        queryCriarTabela  += titulo + "TEXT, ";
-        queryCriarTabela += conteudo + "LONGTEXT, ";
-        queryCriarTabela += data + "DATE";
+        queryCriarTabela += id + " INTEGER AUTO_INCREMENT, ";
+        queryCriarTabela  += titulo + " TEXT, ";
+        queryCriarTabela += conteudo + " LONGTEXT, ";
+        queryCriarTabela += data + " DATE, ";
+        queryCriarTabela += " PRIMARY KEY(id)";
         queryCriarTabela += ")";
 
         Log.i("dataModel", "Query --> " + queryCriarTabela);

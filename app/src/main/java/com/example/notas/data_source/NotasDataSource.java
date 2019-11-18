@@ -9,6 +9,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.notas.data_model.NotasDataModel;
 import com.example.notas.model.Notas;
 
 public class NotasDataSource extends SQLiteOpenHelper {
@@ -23,10 +24,20 @@ public class NotasDataSource extends SQLiteOpenHelper {
         super(context, DB_NAME, null, DB_VERSION);
 
         db = getWritableDatabase();
+
+
+
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        try{
+            db.execSQL(NotasDataModel.criarQueryTabela());
+            Log.i("datasource", "Tabela " + NotasDataModel.getTABELA() + " criada!");
+        }catch (Exception e){
+            Log.e("datasource", "ERRO DB: " + e.getMessage());
+        }
 
     }
 
@@ -35,7 +46,7 @@ public class NotasDataSource extends SQLiteOpenHelper {
 
     }
 
-    public boolean insert(String tabela, ContentValues contentValues){
+    protected boolean insert(String tabela, ContentValues contentValues){
 
         boolean sucesso = false;
 
@@ -46,6 +57,23 @@ public class NotasDataSource extends SQLiteOpenHelper {
 
         }catch (Exception e){
             Log.e("dataSource", "Erro no SQL ->> " + e.getMessage());
+        }
+
+        return sucesso;
+
+    }
+
+    protected boolean delete(String tabela, int id){
+        boolean sucesso = false;
+
+        try{
+
+            sucesso = db.delete(tabela,"id=?",
+            new String[]{Integer.toString(id)}) > 0;
+
+        }catch (Exception e){
+            Log.e("dataSource", "Erro no SQL ->> " + e.getMessage());
+
         }
 
         return sucesso;

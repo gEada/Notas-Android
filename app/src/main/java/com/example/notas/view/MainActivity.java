@@ -3,6 +3,9 @@ package com.example.notas.view;
 import android.os.Bundle;
 
 import com.example.notas.R;
+import com.example.notas.data_model.NotasDataModel;
+import com.example.notas.data_source.NotasDataSource;
+import com.example.notas.model.Notas;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -30,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        NotasDataSource db = new NotasDataSource(getApplicationContext());
 
 
 
