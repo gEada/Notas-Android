@@ -12,20 +12,20 @@ import androidx.annotation.Nullable;
 import com.example.notas.data_model.NotasDataModel;
 import com.example.notas.model.Notas;
 
-public class NotasDataSource extends SQLiteOpenHelper {
+import java.util.ArrayList;
+
+public class DataSource extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "notas_app.sql";
     private static final int DB_VERSION = 1;
 
-    SQLiteDatabase db;
-    Cursor cursor;
+    private SQLiteDatabase db;
+    private Cursor cursor;
 
-    public NotasDataSource(@Nullable Context context) {
+    public DataSource(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
 
         db = getWritableDatabase();
-
-
 
     }
 
@@ -77,6 +77,53 @@ public class NotasDataSource extends SQLiteOpenHelper {
         }
 
         return sucesso;
+
+    }
+
+    protected boolean update(String tabela, ContentValues contentValues){
+        boolean sucesso;
+
+        int id = contentValues.getAsInteger("id");
+        try {
+
+            sucesso = db.update(tabela, contentValues, "id=?", new String[]{Integer.toString(id)}) > 0;
+        }catch(Exception e){
+            sucesso = false;
+
+            Log.e("dataSource", "ERROR DB ->>> " + e.getMessage());
+        }
+
+
+
+        return sucesso;
+    }
+
+    protected ArrayList<Notas> getAllNotas(){
+        Notas obj = new Notas();
+
+        ArrayList<Notas> arrayList = new ArrayList<Notas>();
+
+        String SQL = "SELECT * FROM " + NotasDataModel.getTABELA() + " DESC";
+
+        cursor = db.rawQuery(SQL, null);
+
+        if(cursor.moveToFirst()){
+
+            do {
+
+                obj.setConteudo(cursor.getString(cursor.getColumnIndex(NotasDataModel.getConteudo())));
+                obj.setData(cursor.getString(cursor.getColumnIndex(NotasDataModel.getData())));
+                obj.setTitulo(cursor.getString(cursor.getColumnIndex(NotasDataModel.getTitulo())));
+
+                arrayList.add(obj);
+
+            }while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+
+        return arrayList;
 
     }
 
